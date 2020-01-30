@@ -23,24 +23,24 @@
 %left '(' ')'
 
 %%
-
-/* Math Expressions */
-E:E'+'E   {$$ = $1 + $3;}
- |E'-'E   {$$ = $1 - $3;}
- |E'*'E   {$$ = $1 * $3;}
- |E'/'E   {$$ = $1 / $3;}
- |E'//'E  {$$ = floor($1 / $3);}
- |INTEGER {$$ = $1;}
- |FLOAT   {$$ = $1;}
+/* Priority in the tree goes lower */
+/* Add/Subtract Expressions */
+P0:P0'+'P0   {$$ = $1 + $3;}
+  |P0'-'P0   {$$ = $1 - $3;}
+  |P1        {$$ = $1;}
 ;
 
-/* Variables */
-var:IDENTIFIER {;}
-   |"int" IDENTIFIER {;}
-   |"float" IDENTIFIER {;}
-   |"double" IDENTIFIER {;}
-   |"int" IDENTIFIER '=' E {;}
-   |"float" IDENTIFIER '=' E {;}
-   |"double" IDENTIFIER '=' E {;}
+/* Multiply/Divide/Integer Divide Expressions */
+P1:P1'*'P1   {$$ = $1 * $3}
+  |P1'/'P1   {$$ = $1 / $3;}
+  |P1"//"P1  {$$ = floor($1 / $3);}
 ;
+
+/* Bottom Space to hold the number parsing */
+Numbers:INTEGER {$$ = $1;}
+       |FLOAT   {$$ = $1;}
+;
+
+
+
 %%
