@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <strings.h>
+#define YYSTYPE int
 %}
 
 /* Define tokens */
@@ -9,21 +10,22 @@
 %token IDENTIFIER
 
 /* Define the union for passing from lex */
-%union {
+/* %union {
   int intVal;
   float floatVal;
   char *charVal
   char *identifierVal
-}
+} */
+/* %define yylval int; */
 
 /* Define mathematical recursion */
 /* Lower in the list gets priority */
 %left '+' '-'
-%left '*' '/' '//' '%'
+%left '*' '/' "//" '%'
 %left '(' ')'
 
 %%
-/* Priority in the tree goes lower */
+/* Higher priority in the tree goes lower */
 /* Add/Subtract Expressions */
 P0:P0'+'P0   {$$ = $1 + $3;}
   |P0'-'P0   {$$ = $1 - $3;}
@@ -31,16 +33,24 @@ P0:P0'+'P0   {$$ = $1 + $3;}
 ;
 
 /* Multiply/Divide/Integer Divide Expressions */
-P1:P1'*'P1   {$$ = $1 * $3}
+P1:P1'*'P1   {$$ = $1 * $3;}
   |P1'/'P1   {$$ = $1 / $3;}
   |P1"//"P1  {$$ = floor($1 / $3);}
+  |Numbers   {$$ = $1;}
 ;
 
 /* Bottom Space to hold the number parsing */
 Numbers:INTEGER {$$ = $1;}
-       |FLOAT   {$$ = $1;}
+/* Numbers:INTEGER {$<intVal>1 = yylval->intVal;} */
+       /* |FLOAT   {$<floatVal>1 = $1;} */
 ;
 
-
-
 %%
+
+void main() {
+   yyparse();
+}
+
+void yyerror(const char *s){
+  printf("%s\n", "Expression is incorrect");
+}
