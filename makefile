@@ -13,8 +13,8 @@ bin/lex.yy.c: src/c.lex
 bin/y.tab.c: src/c.yacc
 	yacc $(yaccArgs) src/c.yacc
 
-full: src/lex.yy.c src/y.tab.c
-	gcc $(nonFlag) src/lex.yy.c src/y.tab.c -o undef.exe
+full: bin/lex.yy.c bin/y.tab.c
+	gcc $(nonFlag) bin/lex.yy.c bin/y.tab.c -o undef.exe
 
 clean:
 	rm bin/*.*

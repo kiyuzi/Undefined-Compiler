@@ -5,11 +5,11 @@
 %}
 
 %%
-([0-9]*) {yylval->intVal = atoi(yytext); return INTEGER;}
-([0-9]*[.][0-9][0-9]*) {yylval->floatVal = atof(yytext); return FLOAT;}
-(("\'"|"\"")[a-zA-z0-9]("\'"|"\"")) {strcpy(yylval->charVal, yytext); return CHAR;}
-
-([a-z][a-zA-Z0-9]) {strcpy(yylval->identifierVal, yytext); return IDENTIFIER}
+([0-9]*) {yylval.intVal = atoi(yytext); return INTEGER;}
+([0-9]*[.][0-9][0-9]*) {yylval.floatVal = atof(yytext); return FLOAT;}
+(("\'"|"\"")[a-zA-Z0-9]("\'"|"\"")) {strcpy(yylval.charVal, yytext); return CHAR;}
+(("\'"|"\"")[a-zA-Z0-9][a-zA-Z0-9]*("\'"|"\"")) {;}
+([a-z][a-zA-Z0-9]) {strcpy(yylval.identifierVal, yytext); return IDENTIFIER;}
 
 ("//".*) {;}
 ([/][*]([^*]|[*]*[^*/])*[*]+[/]) {;}
